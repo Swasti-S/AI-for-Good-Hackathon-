@@ -26,7 +26,6 @@ Home buyers and tenants in India often have little visibility into hidden issues
 ## 🏗️ Architecture & Process Flow
 The system uses a multi-agent approach to separate automated processing from user interaction.
 
-![Architecture Diagram](https://via.placeholder.com/800x400?text=Upload+Your+Mermaid+Diagram+Image+Here)
 
 ### 🔄 How It Works (The "Agents")
 
