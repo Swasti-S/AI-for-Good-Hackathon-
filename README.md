@@ -59,27 +59,3 @@ The system uses a multi-agent approach to separate automated processing from use
 * **Weighted Scoring Engine:** Prioritizes critical dangers (e.g., Exposed Wiring = 10 pts) over cosmetic issues (e.g., Peeling Paint = 2 pts).
 * **Natural Language Search:** Chat with your inspection data to find specific evidence without writing SQL.
 
----
-
-## 💻 Core Logic Snippets
-
-### 1. Autonomous Classification Task
-*Automatically tags new images and notes every minute.*
-
-```sql
-CREATE OR REPLACE TASK auto_classify
-  WAREHOUSE = my_wh
-  SCHEDULE = 'USING CRON * * * * * UTC'
-AS
-BEGIN
-  -- Vision: Classify new images
-  INSERT INTO image_defects (image_path, defect_type)
-  SELECT image_path,
-    AI_CLASSIFY('classify inspection defect', image_path, ['crack', 'damp', 'wiring', 'ok'])
-  FROM image_metadata WHERE METADATA$IS_NEW;
-
-  -- NLP: Analyze sentiment
-  INSERT INTO text_inspection_issues (property_id, sentiment)
-  SELECT property_id, AI_SENTIMENT(notes)
-  FROM inspection_notes WHERE METADATA$IS_NEW;
-END;
