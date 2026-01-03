@@ -39,13 +39,13 @@ The system uses a multi-agent approach to separate automated processing from use
 #### **📊 Agent 2: The User Assistant (Frontend)**
 * **Logic:** A **Dynamic Table** constantly re-calculates the `Risk Score` (0-100) based on weighted defects.
 * **Interface:** A **Streamlit** dashboard allows users to select a property and see its status (CRITICAL / WARNING / PASS).
-* **Q&A:** Integrated **Cortex Analyst** allows users to ask questions like *"Show me all damp rooms"* in plain English.
+* **Q&A:** Integrated **Cortex Analyst** allows users to ask questions like *"Show me the risk score for property X?"* in plain English.
 
 ---
 
 ## 🛠️ Tech Stack
 * **Platform:** Snowflake Data Cloud
-* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_SENTIMENT`, `Cortex Analyst`)
+* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_SENTIMENT`, `Cortex Analyst`, `Cortex Agent`)
 * **Orchestration:** Snowflake Streams & Tasks (Cron-based automation)
 * **Data Engineering:** Dynamic Tables (Near real-time processing), Snowpark Python
 * **Frontend:** Streamlit in Snowflake
