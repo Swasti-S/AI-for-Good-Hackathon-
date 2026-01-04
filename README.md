@@ -16,7 +16,7 @@ Home buyers and tenants in India often have little visibility into hidden issues
 
 ## 💡 The Solution
 **AI Home Inspection Intelligence** is a fully automated pipeline that runs entirely on the **Snowflake Data Cloud**:
-1.  **Ingests** raw inspection images and notes into internal stages.
+1.  **Ingests** raw inspection images and notes into internal stages and raw tables.
 2.  **Auto-Detects** defects using **Snowflake Cortex AI**.
 3.  **Calculates** a live "Safety Risk Score" for every property using Dynamic Tables.
 4.  **Visualizes** risks on an interactive dashboard for buyers and regulators.
@@ -33,11 +33,11 @@ Home buyers and tenants in India often have little visibility into hidden issues
 ### 🔄 Technical Workflow
 
 #### **1. Ingestion & Event Detection (The Trigger)**
-* **Data Source:** Inspectors upload raw images and text notes to a **Snowflake Internal Stage**.
-* **Event Trigger:** **Snowflake Streams** monitor the stage for new files. The moment a file lands, the stream captures the change and triggers the downstream pipeline instantly.
+* **Data Source:** Inspectors upload raw images and text notes to a **Snowflake Internal Stage and raw tables**.
+* **Event Trigger:** **Snowflake Streams** monitor the tables for new data. The moment a data lands, the stream captures the change and triggers the downstream pipeline instantly.
 
 #### **2. Autonomous Processing Layer (The Core)**
-* **Orchestration:** **Serverless Tasks** are automatically executed when the stream detects new data.
+* **Autonomous Core:** **Tasks** are automatically executed when the stream detects new data.
 * **AI Processing:**
     * **Vision:** The task calls **Cortex Vision (`AI_CLASSIFY`)** to scan pixel data and tag defects (e.g., "Crack", "Damp", "Wiring").
     
