@@ -6,10 +6,41 @@ create or replace TABLE AI_FOR_GOOD.AI_HOME_INSPECTION.PROPERTIES (
 );
 
 -- 2. Rooms Table
-create or replace TABLE AI_FOR_GOOD.AI_HOME_INSPECTION.ROOMS (
-	PROPERTY_ID VARCHAR(16777216),
-	ROOM_NAME VARCHAR(16777216)
-);
+CREATE OR REPLACE TABLE ROOMS
+AS
+WITH 
+-- Count distinct images per property and room type
+image_room_counts AS (
+  SELECT 
+    property_id,
+    room_name,
+    COUNT(DISTINCT image_name) AS image_count
+  FROM image_raw
+  GROUP BY property_id, room_name
+),
+-- Count distinct inspection records per property and room type
+inspection_room_counts AS (
+  SELECT 
+    property_id,
+    room_name,
+    COUNT(DISTINCT inspection_id) AS inspection_count
+  FROM inspection_logs
+  GROUP BY property_id, room_name
+)
+-- Take the MAXIMUM count from both sources for most accurate room count
+SELECT 
+  COALESCE(irc.property_id, ilc.property_id) AS property_id,
+  COALESCE(irc.room_name, ilc.room_name) AS room_name,
+  GREATEST(
+    COALESCE(irc.image_count, 0),
+    COALESCE(ilc.inspection_count, 0)
+  ) AS room_count,
+  irc.image_count AS image_based_count,
+  ilc.inspection_count AS inspection_based_count
+FROM image_room_counts irc
+FULL OUTER JOIN inspection_room_counts ilc
+  ON irc.property_id = ilc.property_id
+  AND irc.room_name = ilc.room_name;
 
 
 -- 3. Inspection Logs (Raw Text)
