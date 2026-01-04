@@ -1,4 +1,4 @@
-# 🏠 Digital Inspector for India
+# 🏠 AI Home Inspection Intelligence
 **AI-Assisted Autonomous Building Inspection System**
 
 ![Snowflake](https://img.shields.io/badge/Built%20With-Snowflake-29B5E8?logo=snowflake)
