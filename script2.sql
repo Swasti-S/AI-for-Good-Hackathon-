@@ -1,14 +1,7 @@
------------------------------------------------------------
--- 1. Populate Metadata (Rooms)
------------------------------------------------------------
 
-INSERT INTO ROOMS (PROPERTY_ID, ROOM_NAME)
-SELECT DISTINCT PROPERTY_ID, ROOM_NAME
-FROM INSPECTION_LOGS
-WHERE ROOM_NAME IS NOT NULL;
 
 -----------------------------------------------------------
--- 2. AI Room Classification (Inspection Logs)
+-- 1. AI Room Classification (Inspection Logs)
 -----------------------------------------------------------
 
 UPDATE INSPECTION_LOGS
@@ -26,7 +19,7 @@ FROM (
 WHERE INSPECTION_LOGS.INSPECTION_ID = classified.INSPECTION_ID;
 
 -----------------------------------------------------------
--- 3. AI NLP Analysis (Sentiment & Defects from Text)
+-- 2. AI defect classification (notes)
 -----------------------------------------------------------
 
 INSERT INTO INSPECTION_LOGS_ISSUES (INSPECTION_ID, INSPECTOR_NOTES, NOTE_DEFECT, NOTE_SENTIMENT)
@@ -44,7 +37,7 @@ SELECT
 FROM INSPECTION_LOGS;
 
 -----------------------------------------------------------
--- 4. Image Path Normalization
+-- 3. Image Path Normalization
 -----------------------------------------------------------
 
 UPDATE IMAGE_RAW AS r
@@ -53,7 +46,7 @@ FROM DIRECTORY(@RAW_DATA_IMAGES) AS d
 WHERE r.IMAGE_NAME = d.relative_path;
 
 -----------------------------------------------------------
--- 5. AI Room Classification (Images)
+-- 4. AI Room Classification (Images)
 -----------------------------------------------------------
 
 UPDATE IMAGE_RAW AS r
@@ -70,10 +63,9 @@ FROM (
 WHERE r.IMAGE_NAME = classified.image_filename;
 
 -----------------------------------------------------------
--- 6. AI Vision Detection (Defects from Images)
+-- 5. AI Defect classification (Images)
 -----------------------------------------------------------
 
-TRUNCATE TABLE IMAGE_ISSUES; -- Optional: Clear old results before run
 
 INSERT INTO IMAGE_ISSUES (IMAGE_PATH, IMAGE_NAME, IMAGE_DEFECT)
 SELECT
