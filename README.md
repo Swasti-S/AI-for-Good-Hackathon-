@@ -7,55 +7,57 @@
 ![Status](https://img.shields.io/badge/Status-Prototype-green)
 
 > **Turning messy inspection photos into life-saving safety scores.**
-> An autonomous Snowflake-native agent that watches for defects 24/7, rates building safety in real-time, and empowers home buyers with transparent data.
+> An autonomous Snowflake-native pipeline that watches for defects 24/7, rates building safety in real-time, and empowers home buyers with transparent data.
 
 ---
 
 ## 🧐 The Problem
-Home buyers and tenants in India often have little visibility into hidden issues in new or under-construction buildings—such as damp walls, exposed wiring, or structural cracks. These risks are often buried in scattered photos and unorganized inspection notes, leading to unsafe living conditions and zero accountability for "slumlords."
+Home buyers and tenants in India often have little visibility into hidden issues in new or under-construction buildings—such as damp walls, exposed wiring, or structural cracks. These risks are often buried in scattered photos and unorganized inspection notes, leading to unsafe living conditions and zero accountability for developers.
 
 ## 💡 The Solution
-**Digital Inspector** is a fully automated AI pipeline that runs entirely on the Snowflake Data Cloud:
+**AI Home Inspection Intelligence** is a fully automated pipeline that runs entirely on the **Snowflake Data Cloud**:
 1.  **Ingests** raw inspection images and notes into internal stages.
-2.  **Auto-Detects** defects using **Snowflake Cortex AI** (Vision & NLP).
+2.  **Auto-Detects** defects using **Snowflake Cortex AI**.
 3.  **Calculates** a live "Safety Risk Score" for every property using Dynamic Tables.
 4.  **Visualizes** risks on an interactive dashboard for buyers and regulators.
 
 ---
 
 ## 🏗️ Architecture & Process Flow
-The system uses a multi-agent approach to separate automated processing from user interaction.
+
+*Figure 1: Autonomous Event-Driven Process Flow*
+
+<img width="1672" height="820" alt="image (4)" src="https://github.com/user-attachments/assets/053f913b-ba2d-4f49-b644-6c6572fabf48" />
 
 
-### 🔄 How It Works (The "Agents")
+### 🔄 Technical Workflow
 
-#### **🤖 Agent 1: The Autonomous Inspector (Backend)**
-* **Trigger:** Watches a Snowflake Internal Stage for new file uploads using **Snowflake Streams**.
-* **Action:** Triggers a **Serverless Task** (`auto_classify`) every minute.
-* **Intelligence:**
-    * **Vision:** Uses `AI_CLASSIFY` to tag images (e.g., "Crack", "Damp", "Wiring").
-    * **NLP:** Uses `AI_SENTIMENT` to detect negative/critical tone in inspector notes.
+#### **1. Ingestion & Event Detection (The Trigger)**
+* **Data Source:** Inspectors upload raw images and text notes to a **Snowflake Internal Stage**.
+* **Event Trigger:** **Snowflake Streams** monitor the stage for new files. The moment a file lands, the stream captures the change and triggers the downstream pipeline instantly.
 
-#### **📊 Agent 2: The User Assistant (Frontend)**
-* **Logic:** A **Dynamic Table** constantly re-calculates the `Risk Score` (0-100) based on weighted defects.
-* **Interface:** A **Streamlit** dashboard allows users to select a property and see its status (CRITICAL / WARNING / PASS).
-* **Q&A:** Integrated **Cortex Analyst** allows users to ask questions like *"Show me the risk score for property X?"* in plain English.
+#### **2. Autonomous Processing Layer (The Core)**
+* **Orchestration:** **Serverless Tasks** are automatically executed when the stream detects new data.
+* **AI Processing:**
+    * **Vision:** The task calls **Cortex Vision (`AI_CLASSIFY`)** to scan pixel data and tag defects (e.g., "Crack", "Damp", "Wiring").
+    
+* **Result:** Structured data is written to the `PROCESSED_DEFECTS` table.
+
+#### **3. Scoring Engine (The Logic)**
+* **Transformation:** **Dynamic Tables** act as a continuous transformation engine. They aggregate the processed defects and apply a weighted scoring algorithm (e.g., *Wiring Issue = 10 pts, Paint Issue = 2 pts*).
+* **Output:** A live `Risk Score` (0-100) is calculated for every room and property in near real-time.
+
+#### **4. Semantic & Consumption Layer (The User)**
+* **Semantic View:** A simplified data layer that maps complex tables to business terms for easier querying.
+* **Natural Language Querying:** **Cortex Analyst** sits on top of the semantic view, allowing users to ask plain-text questions like *"Show me properties with high structural risk."*
+* **Visualization:** A **Streamlit** dashboard displays the final Risk Scores and defect images.
 
 ---
 
 ## 🛠️ Tech Stack
-* **Platform:** Snowflake Data Cloud
-* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_SENTIMENT`, `Cortex Analyst`, `Cortex Agent`)
-* **Orchestration:** Snowflake Streams & Tasks (Cron-based automation)
-* **Data Engineering:** Dynamic Tables (Near real-time processing), Snowpark Python
-* **Frontend:** Streamlit in Snowflake
-
----
-
-## 🚀 Key Features
-
-* **Zero-Touch Automation:** No manual "run" button needed. Upload a photo, and the risk score updates automatically.
-* **Multi-Modal Analysis:** Combines visual data (images) and text data (notes) for a unified risk assessment.
-* **Weighted Scoring Engine:** Prioritizes critical dangers (e.g., Exposed Wiring = 10 pts) over cosmetic issues (e.g., Peeling Paint = 2 pts).
-* **Natural Language Search:** Chat with your inspection data to find specific evidence without writing SQL.
+* **Core Platform:** Snowflake Data Cloud
+* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_COMPLETE`, `Cortex Analyst`,`Cortex Agent`)
+* **Automation:** Snowflake Streams & Serverless Tasks (Event-Driven Architecture)
+* **Data Engineering:** Dynamic Tables (Real-time Risk Scoring), Directory Tables (Unstructured Data)
+* **Frontend:** Streamlit in Snowflake (Python)
 
