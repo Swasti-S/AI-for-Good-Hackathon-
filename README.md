@@ -36,28 +36,28 @@ Home buyers and tenants in India often have little visibility into hidden issues
 * **Data Source:** Inspectors upload raw images and text notes to a **Snowflake Internal Stage and raw tables**.
 * **Event Trigger:** **Snowflake Streams** monitor the tables for new data. The moment a data lands, the stream captures the change and triggers the downstream pipeline instantly.
 
-#### **2. Autonomous Processing Layer (The Core)**
+#### **2. Processing Layer (The Core)**
 * **Autonomous Core:** **Tasks** are automatically executed when the stream detects new data.
 * **AI Processing:**
-    * **Vision:** The task calls **Cortex Vision (`AI_CLASSIFY`)** to scan pixel data and tag defects (e.g., "Crack", "Damp", "Wiring").
+    * **Cortex AI:** The task calls **(`AI_CLASSIFY`)** to scan data (both text and image) and tag defects (e.g., "Crack", "Damp", "Exposed Wiring").
     
-* **Result:** Structured data is written to the `PROCESSED_DEFECTS` table.
+* **Result:** Structured data is written to the processed tables defects.
 
-#### **3. Scoring Engine (The Logic)**
-* **Transformation:** **Dynamic Tables** act as a continuous transformation engine. They aggregate the processed defects and apply a weighted scoring algorithm (e.g., *Wiring Issue = 10 pts, Paint Issue = 2 pts*).
-* **Output:** A live `Risk Score` (0-100) is calculated for every room and property in near real-time.
+#### **3. Risk Scoring Engine (The Logic)**
+* **Transformation:** **Dynamic Tables** act as a continuous transformation engine. They aggregate the processed defects and apply a weighted scoring algorithm (e.g., *Exposed Wiring Issue = 5 pts, Mold Issue = 2 pts*).
+* **Output:** A live `Risk Score` is calculated for every room and property in near real-time.
 
 #### **4. Semantic & Consumption Layer (The User)**
-* **Semantic View:** A simplified data layer that maps complex tables to business terms for easier querying.
+* **Semantic View:** A simplified data layer that maps complex tables to generic terms for easier querying.
 * **Natural Language Querying:** **Cortex Analyst** sits on top of the semantic view, allowing users to ask plain-text questions like *"Show me properties with high structural risk."*
-* **Visualization:** A **Streamlit** dashboard displays the final Risk Scores and defect images.
+* **Visualization:** A **Streamlit in Snowflake** dashboard displays the final Risk Scores , defect images , chart , final result summary and analysis.
 
 ---
 
 ## 🛠️ Tech Stack
 * **Core Platform:** Snowflake Data Cloud
-* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_COMPLETE`, `Cortex Analyst`,`Cortex Agent`)
-* **Automation:** Snowflake Streams & Serverless Tasks (Event-Driven Architecture)
+* **AI & ML:** Snowflake Cortex (`AI_CLASSIFY`, `AI_COMPLETE`, `Cortex Analyst`)
+* **Automation:** Snowflake Streams & Tasks (Event-Driven Architecture)
 * **Data Engineering:** Dynamic Tables (Real-time Risk Scoring), Directory Tables (Unstructured Data)
-* **Frontend:** Streamlit in Snowflake (Python)
+* **Frontend:** Streamlit in Snowflake (Snowpark Python)
 
